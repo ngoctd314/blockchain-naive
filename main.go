@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"crypto/sha256"
+	"fmt"
+	"math/big"
 	"strconv"
 	"time"
 )
@@ -57,4 +59,35 @@ func NewBlockChain() *Blockchain {
 	return &Blockchain{
 		blocks: []*Block{NewGenesisBlock()},
 	}
+}
+
+// targetBits is the block header storing the difficulty at which the block was mined.
+const targetBits = 24
+
+// ProofOfWork ...
+type ProofOfWork struct {
+	block  *Block
+	target *big.Int
+}
+
+// NewProofOfWork ...
+// Here create ProofOfWork structure that holds a pointer to a block and a
+// pointer to a target.
+// we will convert a hash to a big integer and check if it's less that the target
+func NewProofOfWork(b *Block) *ProofOfWork {
+	target := big.NewInt(1)
+	target.Lsh(target, uint(256-targetBits))
+
+	pow := &ProofOfWork{
+		block:  b,
+		target: target,
+	}
+
+	return pow
+}
+
+func main() {
+	target := big.NewInt(1)
+	target.Lsh(target, uint(256-targetBits))
+	fmt.Println(target)
 }
