@@ -86,6 +86,12 @@ func NewProofOfWork(b *Block) *ProofOfWork {
 	return pow
 }
 
+func (pow *ProofOfWork) prepareData(nonce int) []byte {
+	data := bytes.Join([][]byte{pow.block.PrevBlockHash, pow.block.Data}, []byte{})
+
+	return data
+}
+
 func main() {
 	target := big.NewInt(1)
 	target.Lsh(target, uint(256-targetBits))
